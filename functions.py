@@ -5,12 +5,14 @@ import pygame
 from os import listdir
 from os.path import isfile, join
 import time
+from player import *
 pygame.init()
 pygame.mixer.init()
 
 pygame.display.set_caption("Platformer")
 
 WIDTH, HEIGHT = 1200, 768
+# WIDTH, HEIGHT = 1100, 672
 FPS = 60
 PLAYER_VEL = 5
 WINNER_FONT = pygame.font.SysFont('comicsans', 100)
@@ -18,7 +20,10 @@ BLACK = (0, 0, 0)
 
 SONIDO_FRUTA = pygame.mixer.Sound('sound/collected.mp3')
 SONIDO_BG = pygame.mixer.Sound('sound/bg.mp3')
-# SONIDO_DAÑO = pygame.mixer.Sound('sound\shot.mp3')
+SONIDO_DAÑO = pygame.mixer.Sound('sound/hit1.wav')
+HEART = pygame.image.load("assets/Other/heart pixel 32x32.png")
+HEART_LOST = pygame.image.load("assets/Other/heart_white 12x12.png")
+# DISSAPEAR = pygame.image.load()
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -68,123 +73,177 @@ def get_flag(size):
     surface.blit(image, (0, 0), rect)
     return pygame.transform.scale2x(surface)
 
-def heart(size):
-    path = join("Other", "Terrain", "Terrain.png")
-    image = pygame.image.load(path).convert_alpha()
-    surface = pygame.Surface((size, size), pygame.SRCALPHA, 32)
-    rect = pygame.Rect(288, 144, size, size)
-    surface.blit(image, (0, 0), rect)
-    return pygame.transform.scale2x(surface)
-
-
-
-# def get_gold(size):
-#     path = join("assets", "Terrain", "Terrain.png")
+# def heart(size):
+#     path = join("Other", "Terrain", "Terrain.png")
 #     image = pygame.image.load(path).convert_alpha()
 #     surface = pygame.Surface((size, size), pygame.SRCALPHA, 32)
-#     rect = pygame.Rect(96, 128, size, size)
+#     rect = pygame.Rect(288, 144, size, size)
 #     surface.blit(image, (0, 0), rect)
 #     return pygame.transform.scale2x(surface)
 
+# class Player(pygame.sprite.Sprite):
+#     COLOR = (255, 0, 0)
+#     GRAVITY = 1
+#     SPRITES = load_sprite_sheets("MainCharacters", "PinkMan", 32, 32, True)
+   
+#     ANIMATION_DELAY = 3
 
-class Player(pygame.sprite.Sprite):
-    COLOR = (255, 0, 0)
-    GRAVITY = 1
-    SPRITES = load_sprite_sheets("MainCharacters", "PinkMan", 32, 32, True)
-    ANIMATION_DELAY = 3
+#     def __init__(self, x, y, width, height):
+#         super().__init__()
+        
+#         self.rect = pygame.Rect(x, y, width, height)
+#         self.x_vel = 0
+#         self.y_vel = 0
+#         self.mask = None
+#         self.direction = "left"
+#         self.animation_count = 0
+#         self.fall_count = 0
+#         self.jump_count = 0
+#         self.hit = False
+#         self.hit_count = 0
+#         self.hit_time = 0
+#         self.hit_delay = 3
+#         self.score = 0
+#         self.shoot = False
+#         self.shoot_count = 0
+#         self.last_shot_time = 0
+#         self.shoot_delay = 0.5 
+#         self.bullets = pygame.sprite.Group()
+#         self.lives = 3
+#         self.flag_got_points = False
+#         self.points = 0
+#         self.last_point_time = 0
+#         self.point_delay = 0.5
+        
 
-    def __init__(self, x, y, width, height):
-        super().__init__()
-        self.rect = pygame.Rect(x, y, width, height)
-        self.x_vel = 0
-        self.y_vel = 0
-        self.mask = None
-        self.direction = "left"
-        self.animation_count = 0
-        self.fall_count = 0
-        self.jump_count = 0
-        self.hit = False
-        self.hit_count = 0
-        self.score = 0
-        self.health = 3
 
-    def jump(self):
-        self.y_vel = -self.GRAVITY * 8
-        self.animation_count = 0
-        self.jump_count += 1
-        if self.jump_count == 1:
-            self.fall_count = 0
+#     def manage_lives(self):
+        
+#         if self.lives > 0:
+#             lives = self.lives
+#             for l in range(lives):
+#                 window.blit(HEART, (100 + (l*34),8))
+#         else:
+#             print("MUERTO")
+        
+#     def manage_points(self):  
+            
+#         current_time = time.time()
+#         if not self.flag_got_points or (current_time - self.last_point_time) >= self.point_delay:
+#             self.flag_got_points = True
+#             self.hit_time = current_time
+#             self.points += 10
+        
+        
+#     def jump(self):
+#         self.y_vel = -self.GRAVITY * 8
+#         self.animation_count = 0
+#         self.jump_count += 1
+#         if self.jump_count == 1:
+#             self.fall_count = 0
 
-    def move(self, dx, dy):
-        self.rect.x += dx
-        self.rect.y += dy
+#     def move(self, dx, dy):
+#         self.rect.x += dx
+#         self.rect.y += dy
 
-    def make_hit(self):
-        self.hit = True
+#     def make_hit(self):
+        
+#         current_time = time.time()
+#         if not self.hit or (current_time - self.hit_time) >= self.hit_delay:
+#             self.hit = True
+#             self.hit_time = current_time
+#             self.lives -= 1
+#             SONIDO_DAÑO.play()
+#             self.update_sprite()
+        
+#     def make_shoot(self):
+#         current_time = time.time()
+#         if current_time - self.last_shot_time >= self.shoot_delay:
+#             self.last_shot_time = current_time
+#             self.shoot = True
+#             bullet = Bullet(self.rect.x, self.rect.y + self.rect.height // 2, self.direction) 
+#             self.bullets.add(bullet) 
 
-    def move_left(self, vel):
-        self.x_vel = -vel
-        if self.direction != "left":
-            self.direction = "left"
-            self.animation_count = 0
+#     def move_left(self, vel):
+#         self.x_vel = -vel
+#         if self.direction != "left":
+#             self.direction = "left"
+#             self.animation_count = 0
 
-    def move_right(self, vel):
-        self.x_vel = vel
-        if self.direction != "right":
-            self.direction = "right"
-            self.animation_count = 0
+#     def move_right(self, vel):
+#         self.x_vel = vel
+#         if self.direction != "right":
+#             self.direction = "right"
+#             self.animation_count = 0
 
-    def loop(self, fps):
-        self.y_vel += min(1, (self.fall_count / fps) * self.GRAVITY)
-        self.move(self.x_vel, self.y_vel)
+#     def loop(self, fps):
+#         self.y_vel += min(1, (self.fall_count / fps) * self.GRAVITY)
+#         self.move(self.x_vel, self.y_vel)
 
-        if self.hit:
-            self.hit_count += 1
-        if self.hit_count > fps * 3:
-            self.hit = False
-            self.hit_count = 0
+#         if self.hit:
+#             self.hit_count += 1
+#         if self.hit_count > fps * 3:
+#             self.hit = False
+#             self.hit_count = 0
+            
+#         if self.shoot:
+#             self.shoot_count += 1
+#         if self.shoot_count > fps/3:
+#             self.shoot = False
+#             self.shoot_count = 0
 
-        self.fall_count += 1
-        self.update_sprite()
+#         self.fall_count += 1
+        
+#         self.update_sprite()
 
-    def landed(self):
-        self.fall_count = 0
-        self.y_vel = 0
-        self.jump_count = 0
+#     def landed(self):
+#         self.fall_count = 0
+#         self.y_vel = 0
+#         self.jump_count = 0
 
-    def hit_head(self):
-        self.count = 0
-        self.y_vel *= -1
+#     def hit_head(self):
+#         self.count = 0
+#         self.y_vel *= -1
 
-    def update_sprite(self):
-        sprite_sheet = "idle"
-        if self.hit:
-            sprite_sheet = "hit"
-            # SONIDO_DAÑO.play()
-        elif self.y_vel < 0:
-            if self.jump_count == 1:
-                sprite_sheet = "jump"
-            elif self.jump_count == 2:
-                sprite_sheet = "double_jump"
-        elif self.y_vel > self.GRAVITY * 2:
-            sprite_sheet = "fall"
-        elif self.x_vel != 0:
-            sprite_sheet = "run"
+        
+#     def update_sprite(self):
+#         sprite_sheet = "idle"
+#         if self.hit:
+#             sprite_sheet = "hit"
+#             # SONIDO_DAÑO.play()
+#         elif self.shoot:
+#             sprite_sheet = "test"
+#         elif self.y_vel < 0:
+#             if self.jump_count == 1:
+#                 sprite_sheet = "jump"
+#             elif self.jump_count == 2:
+#                 sprite_sheet = "double_jump"
+#         elif self.y_vel > self.GRAVITY * 2:
+#             sprite_sheet = "fall"
+#         elif self.x_vel != 0:
+#             sprite_sheet = "run"
+        
+        
+#         sprite_sheet_name = sprite_sheet + "_" + self.direction
+#         sprites = self.SPRITES[sprite_sheet_name]
+#         sprite_index = (self.animation_count //
+#                         self.ANIMATION_DELAY) % len(sprites)
+#         self.sprite = sprites[sprite_index]
+#         self.animation_count += 1
+#         self.update()
 
-        sprite_sheet_name = sprite_sheet + "_" + self.direction
-        sprites = self.SPRITES[sprite_sheet_name]
-        sprite_index = (self.animation_count //
-                        self.ANIMATION_DELAY) % len(sprites)
-        self.sprite = sprites[sprite_index]
-        self.animation_count += 1
-        self.update()
+        
+#     def update(self):
+#         self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
+#         self.mask = pygame.mask.from_surface(self.sprite)
+        
+#         self.bullets.update()
 
-    def update(self):
-        self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
-        self.mask = pygame.mask.from_surface(self.sprite)
-
-    def draw(self, win, offset_x):
-        win.blit(self.sprite, (self.rect.x - offset_x, self.rect.y))
+#     def draw(self, win, offset_x):
+#         win.blit(self.sprite, (self.rect.x - offset_x, self.rect.y))
+#         self.manage_lives()
+        
+#         # draw_text(str(self.points),300, 8)
 
 
 class Object(pygame.sprite.Sprite):
@@ -198,7 +257,7 @@ class Object(pygame.sprite.Sprite):
 
     def draw(self, win, offset_x):
         win.blit(self.image, (self.rect.x - offset_x, self.rect.y))
-
+    
 
 class Enemy(Object):
     
@@ -222,9 +281,16 @@ class Enemy(Object):
     def update(self):
         self.rect.x += self.move_direction
         self.move_counter += 1
-        if self.move_counter > 100:
+        if self.move_counter > 200:
             self.move_direction *= -1
-            self.move_counter = 0    
+            self.move_counter = 0 
+        
+        self.flip_sprite()  
+    
+    def flip_sprite(self):
+        if self.move_direction == 1:
+            self.image = pygame.transform.flip(self.image, True, False)
+         
     def loop(self):
         sprites = self.enemy[self.animation_name]
         sprite_index = (self.animation_count //
@@ -239,13 +305,45 @@ class Enemy(Object):
 
         if self.animation_count // self.ANIMATION_DELAY > len(sprites):
             self.animation_count = 0
-          
+            
+    
+
+
+class Bullet(pygame.sprite.Sprite):
+    COLOR = (255, 0, 0)
+    SPEED = 1
+
+    def __init__(self, x, y, direction):
+        super().__init__()
+        self.image = pygame.image.load("assets/Other/bullet.png")
+        # self.image.fill(self.COLOR)
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.direction = direction
+
+    def update(self):
+        if self.direction == "right":
+            self.rect.x += self.SPEED
+        elif self.direction == "left":
+            self.rect.x -= self.SPEED
+
+        if self.rect.x > WIDTH or self.rect.x < 0:  # Eliminar la bala cuando salga de la ventana
+            self.kill()
+    
+    def draw(self, win, offset_x):
+        win.blit(self.image, (self.rect.x - offset_x, self.rect.y))
+        
+                  
 class Block(Object):
     def __init__(self, x, y, size):
-        super().__init__(x, y, size, size)
+        super().__init__(x, y, size, size, "block")
         block = get_block(size)
         self.image.blit(block, (0, 0))
-        self.mask = pygame.mask.from_surface(self.image)   
+        self.mask = pygame.mask.from_surface(self.image)
+        
+    
         
 class Flag(Object):
      def __init__(self, x, y, size):
@@ -348,6 +446,9 @@ def draw(window, background, bg_image, player, objects, offset_x):
 
     player.draw(window, offset_x)
     
+    for bullet in player.bullets:
+        bullet.draw(window, offset_x)
+            
     # draw_winner(str(player.score))
    
     pygame.display.update()
@@ -384,13 +485,12 @@ def collide(player, objects, dx):
     return collided_object
 
 
-def draw_winner(text):
-    draw_text = WINNER_FONT.render(text, 1, BLACK)
-    # window.blit(draw_text, (WIDTH/2 - draw_text.get_width() /2, HEIGHT/2 - draw_text.get_height()/2))
-    window.blit(draw_text, (900, 600))
+def draw_text(text, x, y):
     
+    draw_text = WINNER_FONT.render(text, 1, BLACK)
+    window.blit(draw_text, (x,y))
     pygame.display.update()
-    # pygame.time.delay(3000)
+   
     
     
     
@@ -421,24 +521,27 @@ def handle_move(player, objects):
         if obj and obj.name == "enemy":
                 print("SIDE COL")
                 player.make_hit()
-                player.health += -1
-                print("VIDA: {0}".format(player.health)) 
+                # player.health += -1 
+                # print("VIDA: {0}".format(player.health)) 
                 
         if obj and obj.name == "fruit":
             obj.kill()
             print("fruta")
-            player.score += 1
-            print(player.score)
+            # player.manage_points()
             SONIDO_FRUTA.play()
             
     for obj in to_check_vertical:
         if obj and obj.name == "enemy":
             # obj.kill()
             print("VERTICAL COL")
-            print("VIDA: {0}".format(player.health)) 
-            print(player.health)   
+            
+            player.make_hit()
+    
         if obj and obj.name == "flag":
-            print("FLAG")     
+            print("FLAG")  
+    
+
+              
             
                 
 def main(window):
@@ -481,37 +584,50 @@ def main(window):
     scroll_area_width = 200
     
     run = True
+    
     while run:
-        clock.tick(FPS)
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 break
-
+            
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and player.jump_count < 2:
                     player.jump()
+                if event.key == pygame.K_RCTRL:
+                    print("SHOOT")
+                    player.make_shoot()
+                    
+                    
+
+        for bala in player.bullets:  
+            for obj in grupo_objectos:
+                if pygame.sprite.collide_mask(bala, obj) and obj.name == "enemy":
+                    # print("matado")
+                    obj.kill()
+                    bala.kill()
+                elif pygame.sprite.collide_mask(bala, obj) and obj.name == "fire":
+                    bala.kill()
+                elif pygame.sprite.collide_mask(bala, obj) and obj.name == "block":
+                    bala.kill() 
 
         player.loop(FPS)
         fire.loop()
         enemigo.loop()
-        
-        
-        
-        # if pygame.sprite.spritecollide(player, grupo_frutas, True):
-        #     print("eliminado")
-        #     SONIDO_FRUTA.play()
-            
-        
-        for fruta in grupo_frutas:
-            fruta.loop()
-            # pygame.display.update()
+                
+        # for fruta in grupo_frutas:
+        #     fruta.loop()
+        #     # pygame.display.update()
                      
         
         handle_move(player, grupo_objectos)
         draw(window, background, bg_image, player, grupo_objectos, offset_x)
-
+        
+        # current_fps = clock.get_fps()
+        # print("FPS: ", current_fps)
+        clock.tick(FPS)
 
         # movimiento nivel
         # if ((player.rect.right - offset_x >= WIDTH - scroll_area_width) and player.x_vel > 0) or (

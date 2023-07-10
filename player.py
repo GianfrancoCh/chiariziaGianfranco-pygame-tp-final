@@ -9,7 +9,10 @@ pygame.init()
 pygame.mixer.init()
 
 from functions import *
-
+from auxiliar import *
+from constantes import *
+from bullet import *
+from functions import *
 
 class Player(pygame.sprite.Sprite):
     COLOR = (255, 0, 0)
@@ -44,15 +47,13 @@ class Player(pygame.sprite.Sprite):
         self.points = 0
         self.last_point_time = 0
         self.point_delay = 0.5
-        
-
 
     def manage_lives(self):
         
         if self.lives > 0:
             lives = self.lives
             for l in range(lives):
-                window.blit(HEART, (100 + (l*34),8))
+                WINDOW.blit(HEART, (100 + (l*34),8))
         else:
             print("MUERTO")
         

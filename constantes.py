@@ -1,7 +1,8 @@
 import pygame
+from pygame import font
 
 
-WIDTH, HEIGHT = 1200, 576
+WIDTH, HEIGHT = 1200, 768
 # WIDTH, HEIGHT = 1100, 672
 FPS = 60
 PLAYER_VEL = 5

@@ -8,11 +8,10 @@ import time
 pygame.init()
 pygame.mixer.init()
 
-from functions import *
-from auxiliar import *
+from auxiliar import load_sprite_sheets
 from constantes import *
 from bullet import *
-from functions import *
+
 
 class Player(pygame.sprite.Sprite):
     COLOR = (255, 0, 0)

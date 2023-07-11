@@ -78,6 +78,7 @@ class FormGameLevel1(Form):
                 if event.key == pygame.K_j:
                     print("SHOOT")
                     self.player.make_shoot()
+                    SONIDO_SHOT.play()
                     
         for aux_widget in self.lista_widget:
             aux_widget.update(lista_eventos)

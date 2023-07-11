@@ -32,8 +32,9 @@ M_BRIGHT_CLICK = (32,32,32)
 
 
 
-SONIDO_FRUTA = pygame.mixer.Sound('sound/collected.mp3')
+SONIDO_FRUTA = pygame.mixer.Sound('sound/kill_enemy.mp3')
 SONIDO_BG = pygame.mixer.Sound('sound/bg.mp3')
+SONIDO_SHOT = pygame.mixer.Sound('sound/Gun+Silencer.mp3')
 SONIDO_DAÑO = pygame.mixer.Sound('sound/hit1.wav')
 HEART = pygame.image.load("assets/Other/heart pixel 32x32.png")
 HEART_LOST = pygame.image.load("assets/Other/heart_white 12x12.png")

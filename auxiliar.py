@@ -176,4 +176,5 @@ def handle_move(player, objects):
             player.make_hit()
     
         if obj and obj.name == "flag":
-            print("FLAG")  
+            print("FLAG")
+            player.make_win()

@@ -29,7 +29,8 @@ class Form():
             self.image_background = pygame.image.load(path_bg)
             self.image_background = pygame.transform.scale(self.image_background,(w, h)).convert_alpha()
             self.surface.blit(self.image_background,(0,0))
-    
+        elif path_bg == None:
+            pass
             
     @staticmethod
     def set_active(name):

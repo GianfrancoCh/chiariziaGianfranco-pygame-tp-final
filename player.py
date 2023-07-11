@@ -46,6 +46,8 @@ class Player(pygame.sprite.Sprite):
         self.points = 0
         self.last_point_time = 0
         self.point_delay = 0.5
+        self.is_win = False
+        self.is_lose = False
 
     def manage_lives(self):
         
@@ -54,7 +56,10 @@ class Player(pygame.sprite.Sprite):
             for l in range(lives):
                 WINDOW.blit(HEART, (100 + (l*34),8))
         else:
-            print("MUERTO")
+            self.is_lose = True
+            
+    def make_win(self):
+        self.is_win = True
         
     def manage_points(self):  
             
@@ -92,7 +97,8 @@ class Player(pygame.sprite.Sprite):
             self.last_shot_time = current_time
             self.shoot = True
             bullet = Bullet(self.rect.x, self.rect.y + self.rect.height // 2, self.direction) 
-            self.bullets.add(bullet) 
+            self.bullets.add(bullet)
+       
 
     def move_left(self, vel):
         self.x_vel = -vel
@@ -124,7 +130,10 @@ class Player(pygame.sprite.Sprite):
 
         self.fall_count += 1
         
+        
         self.update_sprite()
+        self.update()
+        
 
     def landed(self):
         self.fall_count = 0
@@ -166,8 +175,8 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
         self.mask = pygame.mask.from_surface(self.sprite)
-        
         self.bullets.update()
+        
 
     def draw(self, win, offset_x):
         win.blit(self.sprite, (self.rect.x - offset_x, self.rect.y))

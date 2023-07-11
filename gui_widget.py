@@ -16,6 +16,7 @@ class Widget:
             self.image_background = pygame.transform.scale(self.image_background,(w, h)).convert_alpha()
         else:
             self.image_background = None
+        
         self._text = text
         if(self._text != None):
             pygame.font.init()

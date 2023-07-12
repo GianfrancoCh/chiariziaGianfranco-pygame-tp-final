@@ -26,9 +26,9 @@ class FormSettings(Form):
     
     def on_click_sound_on(self, parametro):
 
-        self.change_state_button(
-            self.boton_on, self.boton_off)
+        self.change_state_button(self.boton_on, self.boton_off)
         
+        pygame.mixer.music.stop()
         pygame.mixer.music.set_volume(0)
 
     def on_click_sound_off(self, parametro):

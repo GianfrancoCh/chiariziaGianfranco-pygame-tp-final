@@ -158,24 +158,17 @@ def handle_move(player, objects):
             player.make_hit()
         
         if obj and obj.name == "enemy":
-                print("SIDE COL")
                 player.make_hit()
                
         if obj and obj.name == "fruit":
             obj.kill()
-            print("fruta")
-            # player.manage_points()
             SONIDO_FRUTA.play()
             
     for obj in to_check_vertical:
-        if obj and obj.name == "enemy":
-            # obj.kill()
-            print("VERTICAL COL")
-            
+        if obj and obj.name == "enemy":         
             player.make_hit()
     
         if obj and obj.name == "flag":
-            print("FLAG")
             player.make_win()
             
 def leer_archivo(path: str):
@@ -184,3 +177,30 @@ def leer_archivo(path: str):
             diccionario = json.load(archivo)
             lista_niveles = diccionario["niveles"]
         return lista_niveles
+    
+    
+    
+
+
+#----------------------------------------
+
+
+# cronometro = TIEMPO_JUEGO
+
+# tiempo = clock_fps.tick(FPS)
+
+# texto_cronometro = utils.generar_texto("Arial", TAMANIO_TEXTO, "Tiempo:{0}".format(cronometro), COLOR_NEGRO)
+# texto_movimientos = utils.generar_texto("Arial", TAMANIO_TEXTO, "Movimientos Restantes:{0}".format(cantidad_movimientos), COLOR_NEGRO)
+# texto_puntuación = utils.generar_texto("Arial", TAMANIO_TEXTO, "{0}/{1} Tarjetas".format(cantidad_tarjetas_descubiertas, cantidad_tarjetas_cubiertas), COLOR_NEGRO)
+
+# if terminar_partida(cronometro, cantidad_movimientos, tablero_juego):
+#     esta_corriendo = False
+#     color = COLOR_VERDE
+#     mensaje = "Felicidades usted ha ganado"
+#     if cronometro == 0 or cantidad_movimientos == 0:
+#         color = COLOR_ROJO
+#         mensaje = "Game Over usted ha perdido "
+#     terminar_juego(pantalla_juego, mensaje, color)
+
+
+

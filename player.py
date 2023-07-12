@@ -48,6 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.point_delay = 0.5
         self.is_win = False
         self.is_lose = False
+        self.has_all_fruit = False
 
     def manage_lives(self):
         
@@ -59,7 +60,8 @@ class Player(pygame.sprite.Sprite):
             self.is_lose = True
             
     def make_win(self):
-        self.is_win = True
+        if self.has_all_fruit:
+            self.is_win = True
         
     def manage_points(self):  
             

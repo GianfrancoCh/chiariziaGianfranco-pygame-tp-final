@@ -45,6 +45,8 @@ def main(window):
     form_lose = FormLose(name="form_lose",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
     form_win = FormWin(name="form_win",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
     form_leaderboard =FormLeaderboard(name="form_leaderboard",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
+    
+    
     while run:
         
         
@@ -74,7 +76,7 @@ def main(window):
         #         (player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0):
         #     offset_x += player.x_vel
 
-    
+     
     quit()
 
 

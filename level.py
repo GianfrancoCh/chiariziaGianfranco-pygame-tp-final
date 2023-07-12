@@ -27,6 +27,9 @@ class FormGameLevel1(Form):
         self.flag_nivel = True
         self.pausado = False
         block_size = 96
+        self.duracion_nivel = 62
+        self.tiempo_inicial = time.time()
+        
 
         self.floor = [Block(i * block_size, HEIGHT - block_size, block_size)
                  for i in range(-WIDTH // block_size, (WIDTH * 2) // block_size)]
@@ -78,39 +81,39 @@ class FormGameLevel1(Form):
 
 
     def generate_player(self):
-        aux_player = self.levels[0]["player"]
+        aux_player = self.levels[2]["player"]
         player = Player(x=aux_player["x"],y=aux_player["y"],width=aux_player["width"],height=aux_player["height"])
 
 
         return player
 
     def generate_frutas(self):
-        fruits = self.levels[1]["fruits"]
+        fruits = self.levels[2]["fruits"]
         for fruit in fruits:
             self.grupo_frutas.add(Fruit(x=fruit["x"],y=fruit["y"], width=fruit["width"], height=fruit["height"]))
-            
+        
         return self.grupo_frutas
 
 
     def generate_enemies(self):
-        enemies = self.levels[1]["enemies"]
+        enemies = self.levels[2]["enemies"]
         for enemy in enemies:
             self.grupo_enemigos.add(Enemy(x=enemy["x"],y=enemy["y"], width=enemy["width"], height=enemy["height"]))
 
 
     def generate_platforms(self):
-        platforms = self.levels[1]["platforms"]
+        platforms = self.levels[2]["platforms"]
         for platform in platforms:
             self.grupo_plataformas.add(Block(x=platform["x"],y=platform["y"], size=platform["size"]))
             
     def generate_flag(self):
-        aux_flag = self.levels[1]["flag"]
+        aux_flag = self.levels[2]["flag"]
         flag = Flag(x=aux_flag["x"],y=aux_flag["y"], size=aux_flag["size"])
         
         return flag
         
     def generate_trampas(self):
-        trampas = self.levels[1]["trampas"]
+        trampas = self.levels[2]["trampas"]
         for trampa in trampas:
             self.grupo_trampas.add(Fire(x=trampa["x"],y=trampa["y"], width=trampa["width"], height=trampa["height"]))
             
@@ -120,6 +123,7 @@ class FormGameLevel1(Form):
 
         # self.cronometro = 120
         # self.music = True
+        self.tiempo_inicial = time.time()
         self.grupo_plataformas.empty()
         self.grupo_enemigos.empty()
         self.grupo_frutas.empty()
@@ -139,7 +143,7 @@ class FormGameLevel1(Form):
 
 
     def update(self, lista_eventos,keys,delta_ms):
-
+ 
 
         for event in lista_eventos:
             if event.type == pygame.KEYDOWN:
@@ -149,26 +153,30 @@ class FormGameLevel1(Form):
                     print("SHOOT")
                     self.player.make_shoot()
                     SONIDO_SHOT.play()
-                if event.key == pygame.K_p:
+                if event.key == pygame.K_ESCAPE:
                     self.pausado = not self.pausado
-
+    
+    
 
         if self.pausado:
 
             window.fill(WHITE)
             draw_text = MENU_FONT.render("PAUSA", 1, BLACK)
-            window.blit(draw_text, (WIDTH/2 -100, HEIGHT/2))
+            window.blit(draw_text, (WIDTH/2 -150, HEIGHT/2 - 200))
+            
             pygame.display.update()
 
         else:
 
             for aux_widget in self.lista_widget:
                 aux_widget.update(lista_eventos)
-
+                  
+            
+            
             for bala in self.player.bullets:
                 for obj in self.grupo_objetos:
                     if pygame.sprite.collide_mask(bala, obj) and obj.name == "enemy":
-                        # print("matado")
+
                         obj.kill()
                         bala.kill()
                     elif pygame.sprite.collide_mask(bala, obj) and obj.name == "fire":
@@ -187,9 +195,16 @@ class FormGameLevel1(Form):
             # for self.fruta in self.grupo_frutas:
             #     self.fruta.loop()
 
+            #MANEJO TIEMPO
+            tiempo_actual = time.time()
+            self.tiempo_transcurrido = tiempo_actual - self.tiempo_inicial
+            self.tiempo_restante = max(self.duracion_nivel - self.tiempo_transcurrido, 0)
+            
+            if self.tiempo_restante == 0:
+                self.player.is_lose = True
+            
             handle_move(self.player, self.grupo_objetos)
-
-
+            
             if self.player.is_lose:
 
                 aux_player = self.levels[0]["player"]
@@ -200,18 +215,19 @@ class FormGameLevel1(Form):
                 self.restart_level()
                 self.active = False
 
-            if self.player.is_win:
+            if len(self.grupo_frutas) == 0:
+                self.player.has_all_fruit = True
                 
-                aux_player = self.levels[0]["player"]
-                self.set_active("form_win")
-                self.active = False
-                self.player.lives = 3 
-                self.player.rect = pygame.Rect(aux_player["x"], aux_player["y"], aux_player["width"], aux_player["height"])  
-                         
-                self.restart_level()
-                self.player.is_win = False
+                if self.player.is_win:
                 
-
+                    aux_player = self.levels[0]["player"]
+                    self.set_active("form_win")
+                    self.active = False
+                    self.player.lives = 3 
+                    self.player.rect = pygame.Rect(aux_player["x"], aux_player["y"], aux_player["width"], aux_player["height"])  
+                            
+                    self.restart_level()
+                    self.player.is_win = False
 
     def draw(self):
         super().draw()
@@ -229,6 +245,9 @@ class FormGameLevel1(Form):
 
         for aux_widget in self.lista_widget:
             aux_widget.draw()
+        
+        draw_text = MENU_FONT.render(str(int(self.tiempo_restante)), 1, BLACK) 
+        window.blit(draw_text, (1050,0))
 
         self.player.draw(window, offset_x)
         # pygame.display.update()

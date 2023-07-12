@@ -3,6 +3,7 @@ from os import listdir
 from os.path import isfile, join
 from player import *
 from constantes import *
+import json
 
 
 pygame.init()
@@ -155,13 +156,11 @@ def handle_move(player, objects):
     for obj in to_check_sides:
         if obj and obj.name == "fire":
             player.make_hit()
-            # draw_winner("FUEGO")
+        
         if obj and obj.name == "enemy":
                 print("SIDE COL")
                 player.make_hit()
-                # player.health += -1 
-                # print("VIDA: {0}".format(player.health)) 
-                
+               
         if obj and obj.name == "fruit":
             obj.kill()
             print("fruta")
@@ -178,3 +177,10 @@ def handle_move(player, objects):
         if obj and obj.name == "flag":
             print("FLAG")
             player.make_win()
+            
+def leer_archivo(path: str):
+      
+        with open(path, 'r') as archivo:
+            diccionario = json.load(archivo)
+            lista_niveles = diccionario["niveles"]
+        return lista_niveles

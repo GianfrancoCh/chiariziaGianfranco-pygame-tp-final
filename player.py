@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
     GRAVITY = 1
     SPRITES = load_sprite_sheets("MainCharacters", "PinkMan", 32, 32, True)
    
-    ANIMATION_DELAY = 3
+    ANIMATION_DELAY = 2
 
     def __init__(self, x, y, width, height):
         super().__init__()
@@ -34,7 +34,7 @@ class Player(pygame.sprite.Sprite):
         self.hit = False
         self.hit_count = 0
         self.hit_time = 0
-        self.hit_delay = 3
+        self.hit_delay = 1.5
         self.score = 0
         self.shoot = False
         self.shoot_count = 0
@@ -179,6 +179,7 @@ class Player(pygame.sprite.Sprite):
         
 
     def draw(self, win, offset_x):
+
         win.blit(self.sprite, (self.rect.x - offset_x, self.rect.y))
         self.manage_lives()
         

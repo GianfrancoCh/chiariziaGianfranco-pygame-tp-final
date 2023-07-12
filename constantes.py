@@ -30,7 +30,8 @@ M_BRIGHT_HOVER = (32,32,32)
 M_BRIGHT_CLICK = (32,32,32)
 
 
-
+font_path = "assets/pixeled_font.ttf"
+PIXEL_FONT = pygame.font.Font(font_path)
 
 SONIDO_FRUTA = pygame.mixer.Sound('sound/kill_enemy.mp3')
 SONIDO_BG = pygame.mixer.Sound('sound/bg.mp3')

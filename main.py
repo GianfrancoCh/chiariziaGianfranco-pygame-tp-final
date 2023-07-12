@@ -16,8 +16,8 @@ from gui_main_menu import FormMainMenu
 from gui_controls import FormControls
 from gui_settings import FormSettings
 from level import FormGameLevel1
-
-
+from gui_lose import FormLose
+from gui_win import FormWin
 
 
 pygame.init()
@@ -31,8 +31,7 @@ background, bg_image = get_background("Green.png")
             
 def main(window):
     clock = pygame.time.Clock()
-
-    block_size = 96
+    
     # small_block = 64
     offset_x = 0
     # scroll_area_width = 200
@@ -42,6 +41,8 @@ def main(window):
     form_controls = FormControls(name="form_controls",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg = "assets/gui/rating/bg.png")
     form_settings = FormSettings(name="form_settings",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg = "assets/gui/rating/bg.png")
     form_level1 = FormGameLevel1(name="form_level1",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg = "assets/gui/rating/bg.png")
+    form_lose = FormLose(name="form_lose",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
+    form_win = FormWin(name="form_win",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
     
     while run:
         

@@ -18,6 +18,7 @@ from gui_settings import FormSettings
 from level import FormGameLevel1
 from gui_lose import FormLose
 from gui_win import FormWin
+from gui_leaderboard import FormLeaderboard
 
 
 pygame.init()
@@ -43,7 +44,7 @@ def main(window):
     form_level1 = FormGameLevel1(name="form_level1",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg = "assets/gui/rating/bg.png")
     form_lose = FormLose(name="form_lose",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
     form_win = FormWin(name="form_win",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
-    
+    form_leaderboard =FormLeaderboard(name="form_leaderboard",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
     while run:
         
         
@@ -73,7 +74,7 @@ def main(window):
         #         (player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0):
         #     offset_x += player.x_vel
 
-    pygame.quit()
+    
     quit()
 
 

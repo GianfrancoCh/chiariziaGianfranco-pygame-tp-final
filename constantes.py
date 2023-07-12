@@ -7,7 +7,7 @@ WIDTH, HEIGHT = 1248, 768
 FPS = 60
 PLAYER_VEL = 5
 WINNER_FONT = pygame.font.SysFont('comicsans', 100)
-MENU_FONT = pygame.font.SysFont("arialblack", 40)
+MENU_FONT = pygame.font.SysFont("arialblack", 70)
 
 #COLORS
 BLACK = (0, 0, 0)

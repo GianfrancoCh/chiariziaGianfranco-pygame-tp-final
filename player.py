@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
     GRAVITY = 1
     SPRITES = load_sprite_sheets("MainCharacters", "PinkMan", 32, 32, True)
    
-    ANIMATION_DELAY = 2
+    ANIMATION_DELAY = 3
 
     def __init__(self, x, y, width, height):
         super().__init__()
@@ -161,7 +161,6 @@ class Player(pygame.sprite.Sprite):
             sprite_sheet = "fall"
         elif self.x_vel != 0:
             sprite_sheet = "run"
-        
         
         sprite_sheet_name = sprite_sheet + "_" + self.direction
         sprites = self.SPRITES[sprite_sheet_name]

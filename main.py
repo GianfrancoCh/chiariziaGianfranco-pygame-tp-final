@@ -58,6 +58,8 @@ def main(window):
         pygame.mixer.music.play(-1)
     else:
         pygame.mixer.music.stop()
+        
+    pygame.mixer.music.set_volume(0.25)
     
     while run:
         

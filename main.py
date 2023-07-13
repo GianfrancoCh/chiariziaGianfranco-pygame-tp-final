@@ -54,7 +54,10 @@ def main(window):
     form_leaderboard =FormLeaderboard(name="form_leaderboard",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/rating/bg.png")
     form_levels = FormLevels(name="form_levels",master_surface = window,x=0,y=0,w=WIDTH,h=HEIGHT,color_background=None,color_border=(255,0,255),active=False,path_bg ="assets/gui/bubble/bg.png")
 
-   
+    if form_settings.sound_enabled:
+        pygame.mixer.music.play(-1)
+    else:
+        pygame.mixer.music.stop()
     
     while run:
         
@@ -73,10 +76,7 @@ def main(window):
         
         draw(window, background, bg_image, player, grupo_objectos, offset_x, aux_form_active, lista_eventos, keys, delta_ms)
         
-        if form_settings.sound_enabled:
-            pygame.mixer.music.play(-1)
-        else:
-            pygame.mixer.music.stop()
+       
         
         current_fps = clock.get_fps()
                 

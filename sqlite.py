@@ -37,9 +37,10 @@ class Sql():
     def devolver_puntaje():
         lista_scoreboard = []
         with sqlite3.connect("db/db_score.db") as conexion:
-            cursor=conexion.execute("SELECT nombre, score, level FROM scoreboard ORDER BY score DESC LIMIT 3")
+            cursor=conexion.execute("SELECT nombre, score, level FROM scoreboard ORDER BY score DESC")
             
             for fila in cursor:
                 lista_scoreboard.append(fila)
+                
         #print(lista_scoreboard)
         return lista_scoreboard

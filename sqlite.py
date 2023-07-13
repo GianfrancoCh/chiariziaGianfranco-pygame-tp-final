@@ -9,10 +9,10 @@ import sqlite3
 
 class Sql():
 
-    def actualizar_tabla(nombre, score):
+    def actualizar_tabla(nombre, score, level):
         with sqlite3.connect("db/db_score.db") as conexion:
             try:
-                conexion.execute("insert into scoreboard (nombre,score) values (?,?)", (nombre, score))
+                conexion.execute("insert into scoreboard (nombre,score,level) values (?,?,?)", (nombre, score, level))
                 conexion.commit()# Actualiza los datos realmente en la tabla
             except:
                 print("Error")
@@ -25,7 +25,8 @@ class Sql():
                                 (
                                         id integer primary key autoincrement,
                                         nombre text,
-                                        score real
+                                        score integer,
+                                        level integer
                                 )
                             '''
                 conexion.execute(sentencia)
@@ -36,7 +37,7 @@ class Sql():
     def devolver_puntaje():
         lista_scoreboard = []
         with sqlite3.connect("db/db_score.db") as conexion:
-            cursor=conexion.execute("SELECT nombre, score FROM scoreboard ORDER BY score DESC LIMIT 5")
+            cursor=conexion.execute("SELECT nombre, score, level FROM scoreboard ORDER BY score DESC LIMIT 3")
             
             for fila in cursor:
                 lista_scoreboard.append(fila)

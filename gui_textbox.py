@@ -4,8 +4,14 @@ from gui_widget import Widget
 from constantes import *
 
 
+import pygame
+from pygame.locals import *
+from gui_widget import Widget
+from constantes import *
+
+
 class TextBox(Widget):
-    def __init__(self,master,x=0,y=0,w=200,h=50,color_background="",color_border="",image_background=None,text="Button",font="Arial",font_size=14,font_color="",on_click=None,on_click_param=None):
+    def __init__(self,master,x=0,y=0,w=200,h=50,color_background=WHITE,color_border=BLACK,image_background=None,text="Button",font="Arial",font_size=14,font_color=BLACK,on_click=None,on_click_param=None):
         super().__init__(master,x,y,w,h,color_background,color_border,image_background,text,font,font_size,font_color)
         self.on_click = on_click
         self.on_click_param = on_click_param
@@ -15,9 +21,9 @@ class TextBox(Widget):
         
     def render(self):
         super().render()
-        # if self.state == M_STATE_HOVER: # Se aclara la imagen
-        #     self.slave_surface.fill(M_BRIGHT_HOVER, special_flags=pygame.BLEND_RGB_ADD) 
-        if self.state == M_STATE_CLICK: # Se oscurece la imagen
+        if self.state == M_STATE_HOVER: # Se aclara la imagen
+            self.slave_surface.fill(M_BRIGHT_HOVER, special_flags=pygame.BLEND_RGB_ADD) 
+        elif self.state == M_STATE_CLICK: # Se oscurece la imagen
             self.slave_surface.fill(M_BRIGHT_CLICK, special_flags=pygame.BLEND_RGB_SUB) 
 
     def update(self,lista_eventos):
@@ -41,3 +47,4 @@ class TextBox(Widget):
                     self._text += evento.unicode
 
         self.render()
+
